@@ -9,10 +9,6 @@ const quizzes = {
   reducers: {
     addQuiz: (state, action) => {
       const newQuiz = action.payload;
-      console.log({
-        ...state.quizzes,
-        [newQuiz.id]: newQuiz
-      })
       state.quizzes = {
         ...state.quizzes,
         [newQuiz.id]: newQuiz

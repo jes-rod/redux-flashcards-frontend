@@ -14,24 +14,24 @@ export default function Quiz() {
   const history = useHistory();
   const quiz = quizzes[quizId];
 
-  const handleClick = async () => {
-    if(quiz.cardIds.length > 0){
-      for(let i = 0; i <= quiz.cardIds.length ; i++ ){
-        const cardId = quiz.cardIds[i];
-        dispatch(deleteCard(cardId));
-        deleteCardApi(cardId);
+  const handleClick = () => {
+    try{
+      if(quiz.cardIds.length > 0){
+        for(let i = 0; i <= quiz.cardIds.length ; i++ ){
+          const cardId = quiz.cardIds[i];
+          deleteCardApi(cardId).then(()=>dispatch(deleteCard(cardId)));
+        }
+        deleteQuizFromTopicApi({quizId, topicId: quiz.topicId}).then(() => dispatch(deleteQuizFromTopic({quizId, topicId: quiz.topicId})));
+        deleteQuizApi(quizId).then(()=> dispatch(deleteQuiz(quizId)));
+        history.push(ROUTES.quizzesRoute());
+      }else{
+        deleteQuizFromTopicApi({quizId, topicId: quiz.topicId}).then(() => dispatch(deleteQuizFromTopic({quizId, topicId: quiz.topicId})));
+        deleteQuizApi(quizId).then(()=> dispatch(deleteQuiz(quizId)));
+        history.push(ROUTES.quizzesRoute());
       }
-      dispatch(deleteQuizFromTopic({quizId, topicId: quiz.topicId}));
-      deleteQuizFromTopicApi({quizId, topicId: quiz.topicId});
-      deleteQuizApi(quizId);
-      dispatch(deleteQuiz(quizId));
-      history.push(ROUTES.deletionRoute());
-    }else{
-      dispatch(deleteQuizFromTopic({quizId, topicId: quiz.topicId}));
-      deleteQuizFromTopicApi({quizId, topicId: quiz.topicId});
-      deleteQuizApi(quizId);
-      dispatch(deleteQuiz(quizId));
-      history.push(ROUTES.deletionRoute());
+  
+    }catch(error){
+      console.log(error);
     }
 
   }

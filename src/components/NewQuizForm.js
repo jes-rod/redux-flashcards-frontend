@@ -53,6 +53,10 @@ export default function NewQuizForm() {
       alert("Please select a topic. If no topic is available in the list, please create one.");
       return
     }
+    if(cardIds.length <= 0){
+      alert("Please add at least one card to the quiz");
+      return
+    }
     const quiz = {
       id: uuidv4(),
       name: name,

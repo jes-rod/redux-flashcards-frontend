@@ -2,13 +2,20 @@ import React, {useEffect} from "react";
 import { Link } from "react-router-dom";
 import ROUTES from "../../app/routes";
 import { selectTopics , addTopics} from './topicsSlice.js'
-import { getTopicsApi } from "../../app/api.js";
+import { getTopicsApi, getQuizzesApi } from "../../app/api.js";
 import { useSelector, useDispatch } from 'react-redux';
+import { addQuizzes } from "../quizzes/quizzesSlice.js";
 
 export default function Topics() {
 
   let topics = useSelector(selectTopics); 
   const dispatch = useDispatch();
+
+  const fetchQuizzes = async () => {
+    const result = await getQuizzesApi();
+    const object = result.reduce((prev, quiz) => ({ ...prev, [quiz.id]: quiz}), {}); // transforming array into object to match store syntax
+    return object 
+  }
 
   const fetchTopics = async () => {
     const result = await getTopicsApi();
@@ -20,6 +27,9 @@ export default function Topics() {
     if(Object.keys(topics).length === 0) {
       fetchTopics().then((value) => {
         dispatch(addTopics(value));
+      });
+      fetchQuizzes().then((value) => {
+        dispatch(addQuizzes(value));
       });
     }
   }, [])

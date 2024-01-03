@@ -12,7 +12,6 @@ import Topics from "../features/topics/Topics";
 import Topic from "../features/topics/Topic";
 import Quiz from "../features/quizzes/Quiz";
 import Quizzes from "../features/quizzes/Quizzes";
-import Deletion from "../features/deletion/Deletion";
 import ROUTES from "./routes";
 
 
@@ -46,9 +45,6 @@ export default function App() {
         <Route path="/quizzes">
           <QuizRoutes />
         </Route>
-        <Route path="/deletion">
-          <DeletionRoute />
-        </Route>
       </Switch>
     </Router>
   );
@@ -74,19 +70,6 @@ function TopicsRoutes() {
   );
 }
 
-function DeletionRoute() {
-  let match = useRouteMatch();
-
-  return (
-    <>
-      <Switch>
-        <Route path={`${match.path}`}>
-          <Deletion />
-        </Route>
-      </Switch>
-    </>
-  );
-}
 
 function QuizRoutes() {
   let match = useRouteMatch();

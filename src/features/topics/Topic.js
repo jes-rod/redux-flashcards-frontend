@@ -1,9 +1,10 @@
 import { Link, useParams, useHistory } from "react-router-dom";
 import ROUTES from "../../app/routes";
-
+import { useEffect } from "react";
 import { selectTopics } from './topicsSlice.js'
 import { selectQuizzes, deleteQuiz } from '../quizzes/quizzesSlice.js'
-import { deleteTopicApi, deleteQuizApi } from "../../app/api.js";
+import { selectCards, addCards } from "../cards/cardsSlice.js";
+import { deleteTopicApi, deleteQuizApi, getCardsApi } from "../../app/api.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteTopic } from "./topicsSlice.js";
 
@@ -13,6 +14,7 @@ export default function Topic() {
 
   const topics = useSelector(selectTopics);
   const quizzes = useSelector(selectQuizzes); 
+  const cards = useSelector(selectCards);
   const dispatch = useDispatch();
   const history = useHistory();
   let { topicId } = useParams();
@@ -28,16 +30,13 @@ export default function Topic() {
       if(quizzesForTopic.length > 0){
         for(let i = 0; i < quizzesForTopic.length ; i++ ){
           const quizId = quizzesForTopic[i];
-          deleteQuizApi(quizId);
-          dispatch(deleteQuiz(quizId));
+          deleteQuizApi(quizId).then(() => dispatch(deleteQuiz(quizId)));
         }
-        deleteTopicApi(topicId);
-        dispatch(deleteTopic(topicId));
-        history.push(ROUTES.deletionRoute());
+        deleteTopicApi(topicId).then(() => dispatch(deleteTopic(topicId)));
+        history.push(ROUTES.topicsRoute());
       }else{
-        deleteTopicApi(topicId);
-        dispatch(deleteTopic(topicId));
-        history.push(ROUTES.deletionRoute());
+        deleteTopicApi(topicId).then(() => dispatch(deleteTopic(topicId)));      
+        history.push(ROUTES.topicsRoute());
       }
     }
     catch(error){
@@ -46,6 +45,19 @@ export default function Topic() {
 
   }
 
+  const fetchCards = async () => {
+    const result = await getCardsApi();
+    const object = result.reduce((prev, card) => ({ ...prev, [card.id]: card}), {}); // transforming array into object to match store syntax
+    return object 
+  }
+
+  useEffect(() => {
+    if(Object.keys(cards).length === 0) {
+      fetchCards().then((value) => {
+        dispatch(addCards(value));
+      });
+    }
+  }, [])
 
   if(topic){
     return (
@@ -54,11 +66,9 @@ export default function Topic() {
         <h1>Topic: {topic.name}</h1>
         <ul className="quizzes-list">
           {quizzesForTopic.map((quiz) => (
-            <div>
               <li className="quiz" key={quiz.id}>
                 <Link to={ROUTES.quizRoute(quiz.id)}>{quiz.name}</Link>
               </li>
-            </div>
   
           ))}
         </ul>
