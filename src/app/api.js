@@ -4,7 +4,7 @@ import axios from 'axios';
 const addTopicApi = async (details) => {
   const {id, name, icon } = details;
   try {
-    const response = await axios.post('http://localhost:8000/topics', {
+    const response = await axios.post('https://redux-flashcards-backend.vercel.app/topics', {
         topic: {
             id,
             name,
@@ -20,7 +20,7 @@ const addTopicApi = async (details) => {
 
 const addQuizToTopicApi = async ({topicId, quizId}) => {
   try {
-    const response = await axios.post('http://localhost:8000/topics/addQuiz', {
+    const response = await axios.post('https://redux-flashcards-backend.vercel.app/topics/addQuiz', {
       topicId,  
       quizId
     });
@@ -32,7 +32,7 @@ const addQuizToTopicApi = async ({topicId, quizId}) => {
 
 const deleteTopicApi = async (topicId) => {
   try {
-    const response = await axios.delete(`http://localhost:8000/topics/${topicId}`);
+    const response = await axios.delete(`https://redux-flashcards-backend.vercel.app/topics/${topicId}`);
     return response.data;
   }catch(err){
     return err.response.data;
@@ -41,7 +41,7 @@ const deleteTopicApi = async (topicId) => {
 
 const deleteQuizFromTopicApi = async ({topicId, quizId}) => {
   try {
-    const response = await axios.post(`http://localhost:8000/topics/deleteQuiz`, {
+    const response = await axios.post(`https://redux-flashcards-backend.vercel.app/topics/deleteQuiz`, {
       topicId,
       quizId
     });
@@ -54,7 +54,7 @@ const deleteQuizFromTopicApi = async ({topicId, quizId}) => {
 const getTopicsApi = async () => {
 
   try {
-    const response = await axios.get('http://localhost:8000/topics');
+    const response = await axios.get('https://redux-flashcards-backend.vercel.app/topics');
     return response.data;
   }catch(err){
     return err.response.data;
@@ -64,7 +64,7 @@ const getTopicsApi = async () => {
 const addQuizApi = async (details) => {
   const {id, name, topicId, cardIds} = details;
   try {
-    const response = await axios.post('http://localhost:8000/quizzes', {
+    const response = await axios.post('https://redux-flashcards-backend.vercel.app/quizzes', {
       quiz: {
             id,
             name,
@@ -81,7 +81,7 @@ const addQuizApi = async (details) => {
 const getQuizzesApi = async () => {
 
   try {
-    const response = await axios.get('http://localhost:8000/quizzes');
+    const response = await axios.get('https://redux-flashcards-backend.vercel.app/quizzes');
     return response.data;
   }catch(err){
     return {error: err};
@@ -90,7 +90,7 @@ const getQuizzesApi = async () => {
 
 const deleteQuizApi = async (quizId) => {
   try {
-    const response = await axios.delete(`http://localhost:8000/quizzes/${quizId}`);
+    const response = await axios.delete(`https://redux-flashcards-backend.vercel.app/quizzes/${quizId}`);
     return response.data;
   }catch(err){
     return err.response.data;
@@ -100,7 +100,7 @@ const deleteQuizApi = async (quizId) => {
 const addCardApi = async (details) => {
   const {id, front, back} = details;
   try {
-    const response = await axios.post('http://localhost:8000/cards', {
+    const response = await axios.post('https://redux-flashcards-backend.vercel.app/cards', {
       card: {
           id,
           front,
@@ -115,7 +115,7 @@ const addCardApi = async (details) => {
 
 const deleteCardApi = async (cardId) => {
   try {
-    const response = await axios.delete(`http://localhost:8000/cards/${cardId}`);
+    const response = await axios.delete(`https://redux-flashcards-backend.vercel.app/cards/${cardId}`);
     return response.data;
   }catch(err){
     return err.response.data;
@@ -125,7 +125,7 @@ const deleteCardApi = async (cardId) => {
 const getCardsApi = async () => {
 
   try {
-    const response = await axios.get('http://localhost:8000/cards');
+    const response = await axios.get('https://redux-flashcards-backend.vercel.app/cards');
     return response.data;
   }catch (err){
     return {error: err};
