@@ -3,8 +3,8 @@ import ROUTES from "../../app/routes";
 import { useEffect } from "react";
 import { selectTopics } from './topicsSlice.js'
 import { selectQuizzes, deleteQuiz } from '../quizzes/quizzesSlice.js'
-import { selectCards, addCards } from "../cards/cardsSlice.js";
-import { deleteTopicApi, deleteQuizApi, getCardsApi } from "../../app/api.js";
+import { selectCards, addCards, deleteCard } from "../cards/cardsSlice.js";
+import { deleteTopicApi, deleteQuizApi, getCardsApi, deleteCardApi } from "../../app/api.js";
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteTopic } from "./topicsSlice.js";
 
@@ -28,9 +28,16 @@ export default function Topic() {
     try{
       e.preventDefault();
       if(quizzesForTopic.length > 0){
+        console.log(quizzesForTopic);
         for(let i = 0; i < quizzesForTopic.length ; i++ ){
-          const quizId = quizzesForTopic[i];
-          deleteQuizApi(quizId).then(() => dispatch(deleteQuiz(quizId)));
+          const quiz = quizzesForTopic[i];
+          if(quiz.cardIds.length > 0){
+            for(let i = 0; i <= quiz.cardIds.length ; i++ ){
+              const cardId = quiz.cardIds[i];
+              deleteCardApi(cardId).then(()=>dispatch(deleteCard(cardId)));
+            }
+          }
+          deleteQuizApi(quiz.id).then(() => dispatch(deleteQuiz(quiz.id)));
         }
         deleteTopicApi(topicId).then(() => dispatch(deleteTopic(topicId)));
         history.push(ROUTES.topicsRoute());
