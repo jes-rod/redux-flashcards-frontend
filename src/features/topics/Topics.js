@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import { Link } from "react-router-dom";
 import ROUTES from "../../app/routes";
 import { selectTopics , addTopics} from './topicsSlice.js'
@@ -10,7 +10,6 @@ export default function Topics() {
 
   let topics = useSelector(selectTopics); 
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false)
 
   const fetchQuizzes = async () => {
     const result = await getQuizzesApi();
@@ -26,14 +25,12 @@ export default function Topics() {
 
   useEffect(() => {
     if(Object.keys(topics).length === 0) {
-      setLoading(true);
       fetchTopics().then((value) => {
         dispatch(addTopics(value));
       });
       fetchQuizzes().then((value) => {
         dispatch(addQuizzes(value));
       });
-      setLoading(false);
     }
   }, [])
 
@@ -43,7 +40,7 @@ export default function Topics() {
   return (
     <section className="center">
       <h1>Topics</h1>
-      {loading ? <h3>Loading topics...</h3> : <></>}
+      {Object.keys(topics).length === 0 ? <img alt="loading icon" className="h3 text-white p-5" height="50" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif" /> : <></>}
       <ul className="topics-list">
         {Object.values(topics).map((topic) => (
           <li className="topic" key={topic.id}>

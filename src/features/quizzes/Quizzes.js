@@ -9,7 +9,6 @@ import { getQuizzesApi, getCardsApi } from "../../app/api.js";
 export default function Quizzes() {
   const quizzes = useSelector(selectQuizzes); // replace this with a call to your selector to get all the quizzes in state
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false)
 
   const fetchQuizzes = async () => {
     const result = await getQuizzesApi();
@@ -25,21 +24,19 @@ export default function Quizzes() {
 
   useEffect(() => {
     if(Object.keys(quizzes).length === 0) {
-      setLoading(true);
       fetchQuizzes().then((value) => {
         dispatch(addQuizzes(value));
       });
       fetchCards().then((value) => {
         dispatch(addCards(value));
       });
-      setLoading(false);
     }
   }, [])
 
   return (
     <section className="center">
       <h1>Quizzes</h1>
-      {loading ? <h3>Loading topics...</h3> : <></>}
+      {Object.keys(quizzes).length === 0 ? <img alt="loading icon" className="h3 text-white p-5" height="50" src="https://i.gifer.com/origin/34/34338d26023e5515f6cc8969aa027bca.gif" /> : <></>}
       <ul className="quizzes-list">
         {Object.values(quizzes).map((quiz) => (
           <Link key={quiz.id} to={ROUTES.quizRoute(quiz.id)}>
